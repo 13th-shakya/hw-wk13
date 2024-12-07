@@ -2,6 +2,7 @@ package com.example.kotlinhomework5
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +10,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.kotlinhomework5.databinding.ActivityMainBinding
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
@@ -59,10 +65,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        TODO("Not yet implemented")
+        map.isMyLocationEnabled = true
+
+        val taipei = LatLng(25.035, 121.54)
+        val taipei101 = LatLng(25.033611, 121.565000)
+        val taipeiMainStation = LatLng(25.047924, 121.517081)
+        val daanPark = LatLng(25.032435, 121.534905)
+
+        with(map) {
+            addMarker(MarkerOptions().apply {
+                position(taipei101)
+                title("台北101")
+                draggable(true)
+            })
+            addMarker(MarkerOptions().apply {
+                position(taipeiMainStation)
+                title("台北車站")
+                draggable(true)
+            })
+            addPolyline(PolylineOptions().apply {
+                add(taipei101)
+                add(daanPark)
+                add(taipeiMainStation)
+                color(Color.BLUE)
+            }).width = 10f
+            moveCamera(
+                CameraUpdateFactory.newLatLngZoom(taipei, 13f)
+            )
+        }
     }
 
     private fun loadMap() {
-        TODO("Not yet implemented")
+        with (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment) {
+            getMapAsync(this@MainActivity)
+        }
     }
 }
